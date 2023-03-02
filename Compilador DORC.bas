@@ -1,6 +1,4 @@
-Attribute VB_Name = "Módulo1"
 Sub Compilado1()
-Attribute Compilado1.VB_ProcData.VB_Invoke_Func = " \n14"
 '
 ' Compilado1 Macro
 '
@@ -9,53 +7,39 @@ Dim Contador As Integer
 Dim Cantidad As Integer
 Dim Archivo As String
 Dim CerrarArchivo As String
+Dim LastRow As Long
+Dim ContRow As Long
 
 Contador = 1
+ContRow = 1
 Sheets("Listado").Select
 Cantidad = Range("B1")
-
-Do While Contador <= Cantidad
-
-Sheets("Listado").Select
 Archivo = Cells(Contador, 1)
 CerrarArchivo = Cells(Contador, 3)
 
-Workbooks.OpenText Filename:=Archivo
+Do While Contador <= Cantidad
 
-Windows(CerrarArchivo).Activate
-    Range("A1:AZ171").Select
-    Range(Selection, Selection.End(xlDown)).Select
-    Range("A1:AZ1048575").Select
-    Range(Selection, Selection.End(xlUp)).Select
-    Range("A1:AZ1250").Select
+    Sheets("Listado").Select
+
+    Workbooks.OpenText Filename:=Archivo
+    LastRow = Cells(Rows.Count, "A").End(xlUp).Row
+
+    Windows(CerrarArchivo).Activate
+    Range("A1:AZ1090").Select
     Selection.Copy
-    Windows("Compilacion.xlsm").Activate
-    
+
+    ThisWorkbook.Activate
     Sheets("Compilacion").Select
+
+    Windows("Compilacion.xlsm").Activate
+    Cells(ContRow, 1).Select
     ActiveSheet.Paste
-    Application.CutCopyMode = False
-    Range("A1048575").Select
-    Selection.End(xlDown).Select
-    Selection.End(xlDown).Select
-    Selection.End(xlDown).Select
-    Selection.End(xlDown).Select
-    Selection.End(xlDown).Select
-    Range("B1048576").Select
-    Selection.End(xlUp).Select
-    Range("B1091").Select
     
+    Application.CutCopyMode = False
+    Workbooks(CerrarArchivo).Close SaveChanges:=False
 
-
-
-ThisWorkbook.Activate
-Sheets("Listado").Select
-
-
-Workbooks(CerrarArchivo).Close SaveChanges:=False
-
-
-
-Contador = Contador + 1
+    ContRow = ContRow + LastRow
+    Contador = Contador + 1
 
 Loop
 
